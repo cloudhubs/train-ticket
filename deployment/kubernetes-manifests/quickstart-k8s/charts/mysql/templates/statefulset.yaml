@@ -172,12 +172,7 @@ spec:
       - name: xenon
         image: "{{ .Values.xenon.image }}:{{ .Values.xenon.tag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-        {{- with .Values.xenon.args }}
-        args:
-        {{- range . }}
-          - {{ . | quote }}
-        {{- end }}
-        {{- end }}
+        command: ['sh', '-c', 'docker-entrypoint;sed -i "s/\"host\": \"localhost\"/\"host\": \"127.0.0.1\"/" /etc/xenon/xenon.json;xenon -c /etc/xenon/xenon.json']
         lifecycle:
           postStart:
             exec:
